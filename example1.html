@@ -3,13 +3,62 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Example1 Page</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+        <style>
+            body {
+                padding: 50px;
+            }
+            article {
+                padding: 20px 0;
+            }
+            form fieldset > div {
+                margin: 5px 0;
+            }
+            form fieldset > div > * {
+                margin-right: 5px;
+            }
+            form fieldset > div > span {
+                display: none;
+                font-style: italic;
+                color: red;
+            }
+        </style>
     </head>
     <body>
+        <header>
+            <h1>Example 1: Form</h1>
+        </header>
+        <section class="readme">
+            <article>
+                <p>
+                    Please, find functional test results in
+                    <a href="./tests-js/index.html">./tests-js/index.html</a>
+                </p>
+                <h2>Intended behavior</h2>
+                <p>
+                    Validates the form by requesting server controller before submiting
+                </p>
+                <p>
+                    Between validation request sent to the server and the response received
+                    events the submit button is inactive
+                </p>
+            </article>
+        </section>
         <section class="form-example">
             <form class="signup-example">
-                <input type="text" name="email" />
-                <input type="password" name="password" />
-                <button type="submit"></button>
+                <fieldset>
+                    <legend>Sign Up</legend>
+                    <div>
+                        <label for="email">Email:</label>
+                        <input type="text" name="email" />
+                        <span></span>
+                    </div>
+                    <div>
+                        <label for="email">Password:</label>
+                        <input type="password" name="password" />
+                        <span></span>
+                    </div>
+                    <button type="submit" data-loading-text="Wait...">OK</button>
+                </fieldset>
             </form>
         </section>
         <section class="widget-example">
@@ -17,9 +66,96 @@
 
 <script type="text/javascript">
 (function( $, window, undefined) {
+   // Btn object which can change status
+   var Button = function( btn ) {
+       var $btn = $( btn ),
+           _loadingText = $btn.data( "loadingText" ),
+           _readyText = $btn.text();
+       return {
+           setLoading: function() {
+               $btn.text( _loadingText ).attr( "disabled", "disabled" );
+           },
+           setReady: function() {
+               $btn.text( _readyText ).removeAttr( "disabled" );
+           }
+       }
+   },
+      // Validates the form by requesting server controller before submiting
+      // Between validation request sent to the server and the response received
+      // events the submit button is inactive
+      FormProcessor = (function() {
+        var $form,
+            $input = {},
+            $msgs,
+            $btn;
+        return {
+            init: function() {
+                $form = $( "form.signup-example" );
+                $input.email = $form.find( "input[name=email]" );
+                $input.password = $form.find( "input[name=password]" );
+                $msgs = $form.find( "fieldset > div > span" );
+                $btn = new Button( $form.find( "button[type=submit]" ) );
+                $form.on( "submit.example", $.proxy( this.validateForm, this ) );
+            },
+            // After validation either the form is submited or error messages shown
+            validateForm : function( e ) {
+                var that = this;
+                e.preventDefault();
+                $btn.setLoading();
+                $.get( "/ex1Controller/", {
+                    email: $input.email.val(),
+                    password: $input.password.val()
+                }, function( resp ) {
+                    $btn.setReady();
+                    if ( resp.status === "OK" ) {
+                        that.submitForm();
+                    } else {
+                        that.showErrorMsg( resp.errorMsg );
+                    }
+                });
+            },
+            showErrorMsg: function( msgs ) {
+                $msgs.hide().empty();
+                $.each( msgs, function( elName, msg ) {
+                    $input[ elName ].find( "+ span").text( msg ).show();
+                });
+            },
+            submitForm: function() {
+                $form.submit();
+            }
+        }
+   }());
+
+   // Let's mock up jQuery AJAX alias
+   $.get = function( url, params, fn ) {
+        var isValid = {
+            email: function( email ) {
+                var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/g;
+                return pattern.test( email );
+            },
+            password: function( password ) {
+                return password.length > 8;
+            }
+        }
+        window.setTimeout( function(){
+            var resp = {
+                status: "OK",
+                errorMsg: {}
+            };
+            if ( !isValid.email( params.email ) ) {
+                resp.errorMsg.email = "Invalid email address";
+                resp.status = "FAIL";
+            }
+            if ( !isValid.password( params.password ) ) {
+                resp.errorMsg.password = "Password is too short";
+                resp.status = "FAIL";
+            }
+            fn( resp );
+        }, 500 );
+   }
 
    $(window.document).ready(function(){
-        console.log(1);
+        FormProcessor.init();
     });
 
 }( jQuery, window ));
