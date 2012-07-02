@@ -1,5 +1,5 @@
 (function( window, undefined ) {
-
+    "strict mode";
     var $,
         // UI iterator
         TestSuitCollection = function( data ) {
@@ -28,6 +28,9 @@
                         },
                         visible: function() {
                             return this.is( ":visible" );
+                        },
+                        hidden: function() {
+                            return this.is( ":hidden" );
                         },
                         checked: function() {
                             return this.is( ":checked" );

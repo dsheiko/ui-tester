@@ -4,7 +4,7 @@
   "version": "1.0",
   "author": "Dmitry Sheiko",
   "description": "Functional testing with qUnit",
-  "homepage": "https://github.com/dsheiko/Ui-Tester",
+  "homepage": "https://github.com/dsheiko/ui-tester",
   "licenses": [
    {
        "type": "MIT",
@@ -12,7 +12,7 @@
    }],
   "repository": {
     "type": "git",
-    "url": "https://github.com/dsheiko/Ui-Tester"
+    "url": "git://github.com/dsheiko/ui-tester.git"
   },
   "main": "./js/ui-tester.js",
   "dependencies": {

@@ -1,18 +1,113 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Example1 Page</title>
+        <title>Example with a widget</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+        <style type="text/css">
+            body {
+                padding: 50px;
+                font: 14px Arial;
+            }
+            article {
+                padding: 20px 0;
+            }
+            .summary {
+                position: relative;
+            }
+            .summary > span {
+                cursor: pointer;
+            }
+            .summary > .details {
+                margin: 0 0 14px 14px;
+                display: none;
+            }
+            .summary.exposed > .details {
+                display: block;
+            }
+            .summary::before {
+                position: absolute;
+                left: -14px;
+                content: "\25BC";
+            }
+            .summary.exposed::before {
+                position: absolute;
+                content: "\25B2";
+            }
+        </style>
     </head>
     <body>
-        <section class="form-example">
-            <form>
-                // Toggle
-                <input type="text" name="txt" />
-                <button type="submit">State A</button>
-            </form>
+        <header>
+            <h1>Example with a widget</h1>
+        </header>
+        <section class="readme">
+            <article>
+                <p>
+                    Please, find the functional test results in
+                    <a href="./tests-js/index.html">./tests-js/index.html</a>
+                </p>
+                <h2>Intended behavior</h2>
+                <p>
+                    That is an emulation of HTML5 details/summary elements on legacy browsers.
+                    Those elements are being translated into divs, which treated
+                    in accordion fashion.
+                </p>
+            </article>
         </section>
-        <section class="widget-example">
+        <section class="example">
+            <details>
+                <summary>Lorem ipsum dolor sit amet</summary>
+                <p>Vivamus volutpat consequat lectus non tempus. In malesuada iaculis sapien, bibendum feugiat purus vulputate ut. Vestibulum pulvinar aliquam fermentum. Integer a dui nibh. Sed dignissim, odio eget iaculis fringilla, felis eros auctor eros, ac ullamcorper urna nisi ut neque. Nullam a erat ac velit ullamcorper lacinia. Vivamus nulla felis, cursus auctor ornare vel, cursus in risus. Praesent quis ligula pellentesque odio dictum dapibus. Morbi at mauris metus, nec aliquam risus. Aliquam blandit consequat nisl sed sagittis. Nam in nibh eget turpis molestie faucibus a rutrum mi. </p>
+                <details>
+                    <summary>Lorem ipsum dolor sit amet</summary>
+                    <p>Vivamus volutpat consequat lectus non tempus. In malesuada iaculis sapien, bibendum feugiat purus vulputate ut. Vestibulum pulvinar aliquam fermentum. Integer a dui nibh. Sed dignissim, odio eget iaculis fringilla, felis eros auctor eros, ac ullamcorper urna nisi ut neque. Nullam a erat ac velit ullamcorper lacinia. Vivamus nulla felis, cursus auctor ornare vel, cursus in risus. Praesent quis ligula pellentesque odio dictum dapibus. Morbi at mauris metus, nec aliquam risus. Aliquam blandit consequat nisl sed sagittis. Nam in nibh eget turpis molestie faucibus a rutrum mi. </p>
+                </details>
+                <details>
+                    <summary>Lorem ipsum dolor sit amet</summary>
+                    <p>Vivamus volutpat consequat lectus non tempus. In malesuada iaculis sapien, bibendum feugiat purus vulputate ut. Vestibulum pulvinar aliquam fermentum. Integer a dui nibh. Sed dignissim, odio eget iaculis fringilla, felis eros auctor eros, ac ullamcorper urna nisi ut neque. Nullam a erat ac velit ullamcorper lacinia. Vivamus nulla felis, cursus auctor ornare vel, cursus in risus. Praesent quis ligula pellentesque odio dictum dapibus. Morbi at mauris metus, nec aliquam risus. Aliquam blandit consequat nisl sed sagittis. Nam in nibh eget turpis molestie faucibus a rutrum mi. </p>
+                </details>
+            </details>
+            <details>
+                <summary>Lorem ipsum dolor sit amet</summary>
+                <p>Vivamus volutpat consequat lectus non tempus. In malesuada iaculis sapien, bibendum feugiat purus vulputate ut. Vestibulum pulvinar aliquam fermentum. Integer a dui nibh. Sed dignissim, odio eget iaculis fringilla, felis eros auctor eros, ac ullamcorper urna nisi ut neque. Nullam a erat ac velit ullamcorper lacinia. Vivamus nulla felis, cursus auctor ornare vel, cursus in risus. Praesent quis ligula pellentesque odio dictum dapibus. Morbi at mauris metus, nec aliquam risus. Aliquam blandit consequat nisl sed sagittis. Nam in nibh eget turpis molestie faucibus a rutrum mi. </p>
+            </details>
         </section>
+        <section class="a-mondatory-widget">
+        </section>
+
+<script type="text/javascript">
+(function( $, window, undefined) {
+
+    /* Convert
+    * <details><summary>..</summary>...</details>
+    * to
+    * <div class="summary"><span>...</span><div class="details">..</div></div>
+    */
+    var translateDetailsToDivs = function( context ) {
+    $( context ).find( "details" ).replaceWith(function(){
+        var  $details = $( this ),
+            $summary = $details.find( "> summary" ),
+            summaryHtml = $summary.html();
+        $summary.remove();
+        translateDetailsToDivs( $details );
+        return '<div class="summary"><span>' + summaryHtml + '</span><div class="details">'
+            + $details.html() + '</div></div>';
+
+    });
+    };
+
+   $.fn.shimDetails = function() {
+      translateDetailsToDivs( this );
+      $( this ).find( ".summary > span" ).on( "click.details", function(){
+           $( this ).parent().toggleClass( "exposed" );
+      });
+   };
+
+   $(window.document).ready(function(){
+        $( "section.example" ).shimDetails();
+    });
+
+}( jQuery, window ));
+</script>
+
     </body>
 </html>
