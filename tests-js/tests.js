@@ -120,15 +120,10 @@ var TestSuit =  function( $, proceed, extendQUnit ) {
                     equal( $btn.text(), "OK", "Button is in the initial state" );
                     notEqual( $btn.is(":disabled"), true, "..and enabled" );
                     start();
+                    // Pay attention proceed() must be called as the last test of the suit performed
+                    proceed();
                 });
                 $form.submit();
-            });
-
-            // Workaround to pipe the un-deferred aynchronous tests
-            module( null );
-            test( null, function() {
-                ok( true, "Set of async tests performed");
-                proceed();
             });
         }
 

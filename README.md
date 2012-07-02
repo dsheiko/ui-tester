@@ -65,11 +65,5 @@ Calling proceed() at the end of every UI test-suit, tells the system where to sw
 #### Asynchronous tests
 
 Writing asynchronous tests (e.g. checking UI reaction on XHRs caused by user action), you
-follow the qUnit way (http://qunitjs.com/cookbook/). qUnit will take care of tests run
-synchronously. However it know nothing of that we need to call proceed() after all the test
-in the suit performed. It can be solved by putting an empty test at the suit end:
-
-    test( null, function() {
-        ok( true, "Set of async tests performed");
-        proceed();
-    });
+follow the qUnit way (http://qunitjs.com/cookbook/). Just don't forget to call proceed() (next
+to start()) as the last test of the suit performed
