@@ -2,7 +2,7 @@
 var TestSuit =  function( $, proceed ) {
     return {
          example2: function() {
-            module( "Page integrity" );
+            module( "Widget UI Example" );
             test( "Components availability", function() {
                 testNodes([
                     {node: "section.example",
@@ -48,7 +48,7 @@ var TestSuit =  function( $, proceed ) {
                 $passwordLog = $password.find( "+ span" ),
                 $btn = $form.find( "button[type=submit]" );
 
-            module( "Page integrity" );
+            module( "Form UI Example" );
             test( "Components availability", function() {
                 testNodes([
                     {node: "section.example",
@@ -70,9 +70,7 @@ var TestSuit =  function( $, proceed ) {
                 ]);
             });
 
-            module( "Form handling" );
-
-            asyncTest( "When incorrent email given", 4, function() {
+            asyncTest( "Form handling: When incorrent email given", 4, function() {
                 $email.val( "incorrect email" );
                 $password.val( "ValidPassword" );
                 equal( $emailLog.is(":hidden"), true, "Error message block hidden" );
@@ -84,7 +82,7 @@ var TestSuit =  function( $, proceed ) {
                 });
                 $form.submit();
             });
-            asyncTest( "When incorrent password given", 4, function() {
+            asyncTest( "Form handling: When incorrent password given", 4, function() {
                 $password.val( "short" );
                 equal( $passwordLog.is(":hidden"), true, "Error message block hidden" );
                 equal( $passwordLog.text().length, 0, "..and contains no text" );
@@ -96,8 +94,8 @@ var TestSuit =  function( $, proceed ) {
                 });
                 $form.submit();
             });
-            asyncTest( "Submit button indicates loading while form waits server response", 4,
-                function() {
+            asyncTest( "Form handling: Submit button indicates loading while form waits "
+                + "server response", 4, function() {
                 equal( $btn.text(), "OK", "Button is in the initial state" );
                 notEqual( $btn.is(":disabled"), true, "..and enabled" );
                 $form.on("submit", function() {
@@ -111,8 +109,8 @@ var TestSuit =  function( $, proceed ) {
                 });
                 $form.submit();
             });
-            asyncTest( "The button resets to the initial state after server response received", 2,
-                function() {
+            asyncTest( "Form handling: The button resets to the initial state after "
+                + "server response received", 2, function() {
                 // Resubscribe
                 $form.off("validated.example").on("validated.example", function(){
                     equal( $btn.text(), "OK", "Button is in the initial state" );
