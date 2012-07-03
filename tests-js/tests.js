@@ -1,9 +1,7 @@
 "strict mode";
-var TestSuit =  function( $, proceed, extendQUnit ) {
-    extendQUnit( $ );
+var TestSuit =  function( $, proceed ) {
     return {
          example2: function() {
-
             module( "Page integrity" );
             test( "Components availability", function() {
                 testNodes([

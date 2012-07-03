@@ -83,11 +83,12 @@
                 },
                 // Run the corresponding test suit on the loaded UI
                 runTestSuit: function() {
-                    var current = _collection.current();
+                    var current = _collection.current(),
+                        uiJQuery = window.frames[0].jQuery;
+                    extendQUnit( uiJQuery );
                     window.TestSuit(
-                        window.frames[0].jQuery, // UI's jQuery instance
-                        $.proxy( this.proceed, this ), // Proceed callback in the context of Runner
-                        extendQUnit
+                        uiJQuery, // UI's jQuery instance
+                        $.proxy( this.proceed, this ) // Proceed callback in the context of Runner
                     )[ current.suit ]();
                 }
             }
