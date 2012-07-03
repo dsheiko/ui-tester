@@ -26,8 +26,7 @@ defined in *tests.js* and url is the page address relative to *wwwRoot*).
 
 Test-suits per site page (UIs) are expected in retuirn object of TestSuit function:
 
-    var TestSuit =  function( $, proceed, extendQUnit ) {
-        extendQUnit( $ );
+    var TestSuit =  function( $, proceed ) {
         return {
              example1: function() {
                 // qUnit tests
