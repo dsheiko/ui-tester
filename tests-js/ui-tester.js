@@ -1,4 +1,4 @@
-(function( window, undefined ) {
+(function( window, $ ) {
     "strict mode";
     var $,
         // UI iterator
@@ -21,6 +21,10 @@
         // Callback, which when invoked in the test suit scope, extends qUnit assertion methods
         extendQUnit = function( $ ) {
             $.extend( window, {
+                
+                /* @todo make zepto compatible in the long run.
+                 * By now, it would be best to just disable 'visible', 'hidden' and 'checked' test when using Zepto,
+                 * so that user is aware what's gone wrong ... */
                 testNodes : function( queue ) {
                     var assertions =  {
                         exists: function() {
@@ -47,9 +51,11 @@
         window.UiTester = (function() {
             var $playground,
                 _wwwRoot,
-                _collection;
+                _collection,
+                _config;
             return {
                 init: function( jQuery, config ) {
+                    _config = config;
                     _wwwRoot = config.wwwRoot;
                     $ = jQuery; // Obtain local copy of jQuery
                     this.checkForDependencies();
@@ -83,13 +89,38 @@
                 },
                 // Run the corresponding test suit on the loaded UI
                 runTestSuit: function() {
-                    var current = _collection.current(),
-                        uiJQuery = window.frames[0].jQuery;
+                    
+                    var uiJQuery = this.bootstrapLibrary();
+                    var current = _collection.current();
+                        
                     extendQUnit( uiJQuery );
                     window.TestSuit(
                         uiJQuery, // UI's jQuery instance
                         $.proxy( this.proceed, this ) // Proceed callback in the context of Runner
                     )[ current.suit ]();
+                },
+                
+                bootstrapLibrary : function() {
+                    var res = null;
+                    if(typeof _config.library != 'undefined') {
+
+                        /* disregard capitalization of the word. 
+                         * Zepto, or zepto. jQuery or jquery. It should all be good enough
+                         */
+                        switch(_config.library.toLowerCase()) {  
+
+                            // handle Zepto.js as an option, @see http://zeptojs.com/
+                            case 'zepto':
+                                res = window.frames[0].Zepto;
+                            break;
+
+                            // use jQuery as a fallback
+                            default:
+                                res = window.frames[0].jQuery;
+                            break;
+                        }
+                    }
+                    return res;
                 }
             }
     }());
