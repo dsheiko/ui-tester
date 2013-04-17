@@ -10,7 +10,7 @@ With this tool you can simply test UI of your jQuery-based site simulating user 
 
 Unpack ui-tester (tests-js folder) anywhere within the same domain of your site. Specify testing
 configuration in index.html
-
+```
     UiTester.init( $, {
         testsuites : [
             {suit : "example1", url: "example1.html"},
@@ -18,14 +18,14 @@ configuration in index.html
         ],
         wwwRoot : "./../"
     });
-
+```
 Where *testsuites* contains all the site pages you intend to test (*suit* - test suit variable,
 defined in *tests.js* and url is the page address relative to *wwwRoot*).
 
 #### Writing tests
 
 Test-suits per site page (UIs) are expected in retuirn object of TestSuit function:
-
+```
     var TestSuit =  function( $, proceed ) {
         return {
              example1: function() {
@@ -38,10 +38,10 @@ Test-suits per site page (UIs) are expected in retuirn object of TestSuit functi
              },
         }
     };
-
+```
 Within the scope of every UI test-suit function you can write generic qUnit tests.
 Besides, extendQUnit declares testNodes assertion helper, which makes on-DOM assertions more readable:
-
+```
     test( "Test DOM", function() {
         testNodes([
             {node: "selector",
@@ -58,7 +58,7 @@ Besides, extendQUnit declares testNodes assertion helper, which makes on-DOM ass
             }
         ]);
     });
-
+```
 Calling proceed() at the end of every UI test-suit, tells the system where to switch to the next UI.
 
 #### Asynchronous tests
@@ -66,3 +66,5 @@ Calling proceed() at the end of every UI test-suit, tells the system where to sw
 Writing asynchronous tests (e.g. checking UI reaction on XHRs caused by user action), you
 follow the qUnit way (http://qunitjs.com/cookbook/). Just don't forget to call proceed() (next
 to start()) as the last test of the suit performed
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/025331cf413f4bf56586a4b3b993b29c "githalytics.com")](http://githalytics.com/dsheiko/ui-tester)
