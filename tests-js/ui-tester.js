@@ -2,7 +2,7 @@
     "strict mode";
     var $,
         // UI iterator
-        TestSuitCollection = function( data ) {
+        TestSuiteCollection = function( data ) {
             var _index = 0,
                 _data = data,
                 _length = _data.length;
@@ -53,7 +53,7 @@
                     _wwwRoot = config.wwwRoot;
                     $ = jQuery; // Obtain local copy of jQuery
                     this.checkForDependencies();
-                    _collection = TestSuitCollection( config.testsuites );
+                    _collection = TestSuiteCollection( config.testsuites );
                     $playground = $( "#playground" ); // '$' prefix hints at jQuery object
                     this.testNextUI();
                 },
@@ -86,7 +86,7 @@
                     var current = _collection.current(),
                         uiJQuery = window.frames[0].jQuery;
                     extendQUnit( uiJQuery );
-                    window.TestSuit(
+                    window.TestSuite(
                         uiJQuery, // UI's jQuery instance
                         $.proxy( this.proceed, this ) // Proceed callback in the context of Runner
                     )[ current.suit ]();

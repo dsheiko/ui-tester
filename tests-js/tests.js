@@ -1,5 +1,5 @@
 "strict mode";
-var TestSuit =  function( $, proceed ) {
+var TestSuite =  function( $, proceed ) {
     return {
          example2: function() {
             module( "Widget UI Example" );
