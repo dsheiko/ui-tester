@@ -2,12 +2,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>qUnit Tests</title>
-        <link href="http://code.jquery.com/qunit/qunit-1.5.0.css" rel="stylesheet" media="all" />
+        <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-git.css" type="text/css" media="screen">
         <link href="./assets/default.css" rel="stylesheet" media="all" />
 
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-        <script src="http://code.jquery.com/qunit/qunit-1.5.0.js" type="text/javascript"></script>
-
+        <script type="text/javascript" src="http://code.jquery.com/qunit/qunit-git.js"></script>
+    
+        <script src="../vendors/assertNodes/qunit-assert-nodes.js" type="text/javascript"></script>
         <script src="./tests.js" type="text/javascript"></script>
         <script src="./ui-tester.js" type="text/javascript"></script>
 
@@ -29,19 +30,19 @@
         <div id="qunit-fixture">test markup, will be hidden</div>
 
 <script type="text/javascript">
-(function( $, window, undefined) {
-
-   $(window.document).ready(function(){
+(function( global ) {
+   "strict mode"; 
+   var $ = global.jQuery; 
+   $( global.document ).ready(function(){
         UiTester.init( $, {
             testsuites : [
-                {suit : "example1", url: "ui-form-example.html"},
-                {suit : "example2", url: "ui-widget-example.html"}
-            ],
-            wwwRoot : "./../"
+                {suite : global.TestSuites.example1, url: "../ui-form-example.html"},
+                {suite : global.TestSuites.example2, url: "../ui-widget-example.html"}
+            ]
         });
     });
 
-}( jQuery, window ));
+}( this ));
 </script>
 
     </body>

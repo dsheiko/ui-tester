@@ -1,98 +1,102 @@
-(function( window, undefined ) {
+/*
+ * @package UI Tester
+ * @author sheiko
+ * @license MIT
+ * @copyright (c) Dmitry Sheiko http://www.dsheiko.com
+ * @jscs standard:Jquery
+ * Code style: http://docs.jquery.com/JQuery_Core_Style_Guidelines
+ */
+(function( global ) {
     "strict mode";
+        /* @var {object} */
     var $,
-        // UI iterator
+        /**
+         * UI iterator
+         * @class
+         * @param {object} data
+         */
         TestSuiteCollection = function( data ) {
             var _index = 0,
                 _data = data,
                 _length = _data.length;
             return {
+                /**
+                 * @public
+                 */
                 next: function() {
                     _index++;
                 },
+                /**
+                 * @public
+                 * @return {object}
+                 */
                 current: function() {
                     return _data[ _index ];
                 },
+                /**
+                 * @public
+                 * @return {boolean}
+                 */
                 isValid: function() {
                     return _index < _length && _index >= 0;
                 }
-            }
-        },
-        // Callback, which when invoked in the test suit scope, extends qUnit assertion methods
-        extendQUnit = function( $ ) {
-            $.extend( window, {
-                testNodes : function( queue ) {
-                    var assertions =  {
-                        exists: function() {
-                            return this.length;
-                        },
-                        visible: function() {
-                            return this.is( ":visible" );
-                        },
-                        hidden: function() {
-                            return this.is( ":hidden" );
-                        },
-                        checked: function() {
-                            return this.is( ":checked" );
-                        }
-                    }
-                    $.each(queue, function(inx, request) {
-                        var node = $(request.node);
-                        ok( assertions[ request.assert ].call( node ), request.msg );
-                    });
-                }
-            });
+            };
         };
-        // Application runner
-        window.UiTester = (function() {
+        /**
+         * Application runner
+         * @return {object}
+         */ 
+        global.UiTester = (function() {
             var $playground,
-                _wwwRoot,
                 _collection;
             return {
+                /**
+                 * @public
+                 * @param {object} jQuery instance
+                 * @param {object} config
+                 */
                 init: function( jQuery, config ) {
-                    _wwwRoot = config.wwwRoot;
                     $ = jQuery; // Obtain local copy of jQuery
-                    this.checkForDependencies();
                     _collection = TestSuiteCollection( config.testsuites );
-                    $playground = $( "#playground" ); // '$' prefix hints at jQuery object
+                    $playground = $("#playground"); // '$' prefix hints at jQuery object
                     this.testNextUI();
                 },
-                checkForDependencies: function() {
-                    var dependencies = ["TestSuit", "QUnit"],
-                        i = 0,
-                        len = dependencies.length;
-                    for( ; i < len; i++ ) {
-                        if ( window[dependencies[ i ]] === undefined ) {
-                            throw new ReferenceError( dependencies[ i ] + " is not defined" );
-                        }
-                    }
-                },
-                // Continue on the UI iterator
+                /**
+                 * Continue on the UI iterator
+                 * @public
+                 */ 
                 proceed: function() {
                     _collection.next();
                     _collection.isValid() && this.testNextUI();
                 },
-                // Load next UI (page) into the iframe on the playground node
+                /** 
+                 * Load next UI (page) into the iframe on the playground node
+                 * @private
+                 */ 
                 testNextUI: function() {
                     var current = _collection.current();
                     $playground.empty();
-                    $('<iframe src="' + _wwwRoot + "/" + current.url
-                        + '"></iframe>')
-                        .appendTo($playground)
-                        .bind("load", $.proxy( this.runTestSuit, this )); // runTestSuit in the context of Runner
+                    $( '<iframe src="' + current.url + 
+                        '"></iframe>' )
+                        .appendTo( $playground )
+                        // runTestSuite in the context of Runner
+                        .bind( "load", $.proxy( this.runTestSuite, this ) ); 
                 },
-                // Run the corresponding test suit on the loaded UI
-                runTestSuit: function() {
+                /** 
+                 * Run the corresponding test suit on the loaded UI
+                 * @private
+                 */  
+                runTestSuite: function() {
                     var current = _collection.current(),
-                        uiJQuery = window.frames[0].jQuery;
-                    extendQUnit( uiJQuery );
-                    window.TestSuite(
-                        uiJQuery, // UI's jQuery instance
-                        $.proxy( this.proceed, this ) // Proceed callback in the context of Runner
-                    )[ current.suit ]();
+                        uiJQuery = global.frames[ 0 ].jQuery;
+                    // Calling next suite in the context of the runner
+                    // which gives us the access to proceed method from the test
+                    current.suite.apply( this, [ uiJQuery ] );
+                    //current.suite(uiJQuery);
                 }
-            }
+            };
     }());
+    
+    
 
-
-}( window));
+}( this ));

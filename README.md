@@ -13,53 +13,48 @@ configuration in index.html
 ```
     UiTester.init( $, {
         testsuites : [
-            {suit : "example1", url: "example1.html"},
-            {suit : "example2", url: "example2.html"}
-        ],
-        wwwRoot : "./../"
+            {suite : example1, url: "../ui-form-example.html"},
+            {suite : example2, url: "../ui-widget-example.html"}
+        ]
     });
 ```
-Where *testsuites* contains all the site pages you intend to test (*suit* - test suit variable,
-defined in *tests.js* and url is the page address relative to *wwwRoot*).
+Whereas example 1 and example 2 functions running a suite of tests.
 
 #### Writing tests
 
-Test-suits per site page (UIs) are expected in retuirn object of TestSuit function:
 ```
-    var TestSuit =  function( $, proceed ) {
-        return {
-             example1: function() {
-                // qUnit tests
-                proceed();
-             },
-             example2: function() {
-                // qUnit tests
-                proceed();
-             },
-        }
-    };
+
+    var example1: function( $ ) {
+           // qUnit tests
+           this.proceed();
+        },
+        example2: function( $ ) {
+           // qUnit tests
+           this.proceed();
+        };
 ```
 Within the scope of every UI test-suit function you can write generic qUnit tests.
-Besides, extendQUnit declares testNodes assertion helper, which makes on-DOM assertions more readable:
+Besides, using assert.nodes QUnit plugin you can write multiple assertions on 
+nodes like that:
 ```
-    test( "Test DOM", function() {
-        testNodes([
-            {node: "selector",
+    test( "Test DOM", function( assert ) {
+        assert.nodes([
+            {   node: "selector",
                 assert: "exists",
-                msg: "Selector found"
+                message: "Selector found"
             },
-            {node: "selector",
+            {   node: "selector",
                 assert: "visible",
-                msg: "Selector visible"
+                message: "Selector visible"
             },
-            {node: "selector",
+            {   node: "selector",
                 assert: "checked",
-                msg: "Selector checked"
+                message: "Selector checked"
             }
         ]);
     });
 ```
-Calling proceed() at the end of every UI test-suit, tells the system where to switch to the next UI.
+Calling this.proceed() at the end of every UI test-suit, tells the system where to switch to the next UI.
 
 #### Asynchronous tests
 

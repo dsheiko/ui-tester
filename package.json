@@ -1,7 +1,7 @@
 {
   "name": "ui-tester",
   "title": "Functional testing with qUnit",
-  "version": "1.0",
+  "version": "1.1.0",
   "author": "Dmitry Sheiko",
   "description": "Functional testing with qUnit",
   "homepage": "https://github.com/dsheiko/ui-tester",
