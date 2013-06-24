@@ -32,7 +32,7 @@ var TestSuites = {
             });
             QUnit.test( "Details/summary emulation", function() {
                 // The nodes, we are going to deal with within the test
-                var $testItem = $( $("section.example .summary")[ 0 ] ),
+                var $testItem = $($("section.example .summary")[ 0 ]),
                     $summary = $testItem.find("> span"),
                     $details = $testItem.find("> .details");
 
@@ -57,8 +57,8 @@ var TestSuites = {
                 that = this;
 
             QUnit.module("Form UI Example");
-            
-             
+
+
             QUnit.test( "Components availability", function( assert ) {
                 assert.nodes([
                     {node: "section.example",
@@ -105,7 +105,7 @@ var TestSuites = {
                 $form.submit();
             });
 
-            QUnit.asyncTest( "Form handling: The button resets to the initial state after " + 
+            QUnit.asyncTest( "Form handling: The button resets to the initial state after " +
                 "server response received", 2, function() {
                 // Resubscribe
                 $form.off("validated.example").on( "validated.example", function(){
