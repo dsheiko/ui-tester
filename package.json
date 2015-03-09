@@ -16,7 +16,7 @@
   },
   "main": "./js/ui-tester.js",
   "dependencies": {
-      'qUnit': 'Testing framework'
+      "qunitjs": "1.x"
   },
   "engines": {
   }

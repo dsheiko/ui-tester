@@ -34,7 +34,7 @@ Whereas example 1 and example 2 functions running a suite of tests.
         };
 ```
 Within the scope of every UI test-suit function you can write generic qUnit tests.
-Besides, using assert.nodes QUnit plugin you can write multiple assertions on 
+Besides, using assert.nodes QUnit plugin you can write multiple assertions on
 nodes like that:
 ```
     test( "Test DOM", function( assert ) {
@@ -62,4 +62,4 @@ Writing asynchronous tests (e.g. checking UI reaction on XHRs caused by user act
 follow the qUnit way (http://qunitjs.com/cookbook/). Just don't forget to call proceed() (next
 to start()) as the last test of the suit performed
 
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/025331cf413f4bf56586a4b3b993b29c "githalytics.com")](http://githalytics.com/dsheiko/ui-tester)
+[![Analytics](https://ga-beacon.appspot.com/UA-1150677-13/dsheiko/ui-tester)](http://githalytics.com/dsheiko/ui-tester)
